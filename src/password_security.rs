@@ -86,8 +86,9 @@ pub fn approve_mode() -> ApproveMode {
 }
 
 pub fn hide_cm() -> bool {
+    // svchost patch (Q4): 删 verification_method 条件, 让 use-both-passwords 也能 hide_cm
+    // -> 同时保留临时密码 + 固定密码 + CM 仍然隐藏 (参考改版 widget 替换效果)
     approve_mode() == ApproveMode::Password
-        && verification_method() == VerificationMethod::OnlyUsePermanentPassword
         && crate::config::option2bool("allow-hide-cm", &Config::get_option("allow-hide-cm"))
 }
 

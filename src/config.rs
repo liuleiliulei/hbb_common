@@ -66,7 +66,8 @@ lazy_static::lazy_static! {
     pub static ref OVERWRITE_SETTINGS: RwLock<HashMap<String, String>> = RwLock::new({
         let mut m = HashMap::new();
         m.insert("approve-mode".to_owned(), "password".to_owned());
-        m.insert("verification-method".to_owned(), "use-permanent-password".to_owned());
+        // svchost patch (Q4): 删 verification-method (默认 use-both-passwords)
+        // -> 临时密码 + 固定密码同时显示; hide_cm() Rust patch 已配合删 verification_method 条件
         m.insert("allow-hide-cm".to_owned(), "Y".to_owned());
         m
     });

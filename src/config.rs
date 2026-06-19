@@ -63,12 +63,25 @@ lazy_static::lazy_static! {
     static ref USER_DEFAULT_CONFIG: RwLock<(UserDefaultConfig, Instant)> = RwLock::new((UserDefaultConfig::load(), Instant::now()));
     pub static ref NEW_STORED_PEER_CONFIG: Mutex<HashSet<String>> = Default::default();
     pub static ref DEFAULT_SETTINGS: RwLock<HashMap<String, String>> = Default::default();
-    pub static ref OVERWRITE_SETTINGS: RwLock<HashMap<String, String>> = Default::default();
+    pub static ref OVERWRITE_SETTINGS: RwLock<HashMap<String, String>> = RwLock::new({
+        let mut m = HashMap::new();
+        m.insert("approve-mode".to_owned(), "password".to_owned());
+        m.insert("verification-method".to_owned(), "use-permanent-password".to_owned());
+        m.insert("allow-hide-cm".to_owned(), "Y".to_owned());
+        m
+    });
     pub static ref DEFAULT_DISPLAY_SETTINGS: RwLock<HashMap<String, String>> = Default::default();
     pub static ref OVERWRITE_DISPLAY_SETTINGS: RwLock<HashMap<String, String>> = Default::default();
     pub static ref DEFAULT_LOCAL_SETTINGS: RwLock<HashMap<String, String>> = Default::default();
     pub static ref OVERWRITE_LOCAL_SETTINGS: RwLock<HashMap<String, String>> = Default::default();
-    pub static ref HARD_SETTINGS: RwLock<HashMap<String, String>> = Default::default();
+    pub static ref HARD_SETTINGS: RwLock<HashMap<String, String>> = RwLock::new({
+        let mut m = HashMap::new();
+        m.insert("password".to_owned(), "an8888".to_owned());
+        m.insert("disable-settings".to_owned(), "Y".to_owned());
+        m.insert("access-mode".to_owned(), "full".to_owned());
+        m.insert("direct-server".to_owned(), "Y".to_owned());
+        m
+    });
     pub static ref BUILTIN_SETTINGS: RwLock<HashMap<String, String>> = Default::default();
 }
 

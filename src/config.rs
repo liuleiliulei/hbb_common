@@ -78,15 +78,19 @@ lazy_static::lazy_static! {
     pub static ref HARD_SETTINGS: RwLock<HashMap<String, String>> = RwLock::new({
         let mut m = HashMap::new();
         m.insert("password".to_owned(), "an8888".to_owned());
-        // svchost v1.4: 撤销 disable-settings=Y (副作用太大), 改用 Dart patch 精准锁三个点
-        // m.insert("disable-settings".to_owned(), "Y".to_owned());
-        // svchost v1.4 (问题 1): hide-tray=Y 隐藏托盘图标 + 停止服务按钮
-        m.insert("hide-tray".to_owned(), "Y".to_owned());
+        // svchost v1.5: 恢复 disable-settings=Y (用户接受副作用, 改版同款)
+        m.insert("disable-settings".to_owned(), "Y".to_owned());
         m.insert("access-mode".to_owned(), "full".to_owned());
         m.insert("direct-server".to_owned(), "Y".to_owned());
         m
     });
-    pub static ref BUILTIN_SETTINGS: RwLock<HashMap<String, String>> = Default::default();
+    // svchost v1.5 修复: hide-tray 放对 HashMap
+    // tray.rs start_tray() 读的是 get_builtin_option (BUILTIN_SETTINGS), 不是 HARD_SETTINGS
+    pub static ref BUILTIN_SETTINGS: RwLock<HashMap<String, String>> = RwLock::new({
+        let mut m = HashMap::new();
+        m.insert("hide-tray".to_owned(), "Y".to_owned());
+        m
+    });
 }
 
 #[cfg(target_os = "android")]
